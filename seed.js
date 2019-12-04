@@ -16,7 +16,13 @@ exports.seedSuperAdmin = async function(req, res, next){
     try{
         let admin = await db.Admin.findOne({email});
         if(!admin){
-            db.Admin.create(superAdmin);
+            db.Admin.create(superAdmin, (err, createdAdmin) => {
+                if(err){
+                    console.log(err);
+                }else{
+                    console.log(createdAdmin);
+                }
+            });
         }
     }catch(err){
         return next(err);
