@@ -7,7 +7,6 @@ const bodyParser = require('body-parser');
 const errorHandler = require('./handlers/error');
 const authRoutes = require('./routes/auth');
 const {seedSuperAdmin} = require('./seed');
-const db = require('./models');
 
 const PORT = process.env.PORT || 8080;
 
