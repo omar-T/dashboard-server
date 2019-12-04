@@ -5,6 +5,7 @@ const cors = require('cors');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const errorHandler = require('./handlers/error');
+const authRoutes = require('./routes/auth');
 
 const PORT = process.env.PORT || 8080;
 
@@ -14,7 +15,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 // routes go here
-
+app.use('/api/auth', authRoutes);
 
 // error handling
 app.use((req, res, next) => {
