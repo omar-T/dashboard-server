@@ -6,6 +6,8 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const errorHandler = require('./handlers/error');
 const authRoutes = require('./routes/auth');
+const {seedSuperAdmin} = require('./seed');
+const db = require('./models');
 
 const PORT = process.env.PORT || 8080;
 
@@ -25,6 +27,9 @@ app.use((req, res, next) => {
 });
 
 app.use(errorHandler);
+
+// Seed database with active and super admin if not found
+seedSuperAdmin();
 
 app.listen(PORT, () => {
     console.log(`Server is starting on port ${PORT}`);
