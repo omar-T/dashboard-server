@@ -3,6 +3,7 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const errorHandler = require('./handlers/error');
 
 const PORT = process.env.PORT || 8080;
 
@@ -20,7 +21,7 @@ app.use((req, res, next) => {
     next(err);
 });
 
-app.use();
+app.use(errorHandler);
 
 app.listen(PORT, () => {
     console.log(`Server is starting on port ${PORT}`);
