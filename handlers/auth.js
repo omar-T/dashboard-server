@@ -7,7 +7,8 @@ exports.signin = async function(req, res, next){
         let admin = await db.Admin.findOne({
             email: req.body.email
         });
-        let {id, email, accessToken, isSuper, isActive} = admin;
+        let {id, email, accessToken, isSuper, isActive, name, surname} = admin;
+        console.log(isSuper);
         let authCreds = `${req.body.email}:${req.body.password}`;
         let incomingToken = Buffer.from(authCreds).toString('base64');
         let isMatch = accessToken === incomingToken;
@@ -16,12 +17,17 @@ exports.signin = async function(req, res, next){
                 // create token (signing a token)
                 let token = jwt.sign({
                     id, 
-                    email
+                    email,
+                    isSuper,
+                    name,
+                    surname
                 }, process.env.SECRET_KEY);
                 return res.status(200).json({
                     id,
                     email,
                     isSuper,
+                    name,
+                    surname,
                     token
                 });
             }else{

@@ -1,7 +1,7 @@
 const db = require('./models');
 
 const email = 'otaha@aisolt.com';
-const password = 'winter';
+const password = '123';
 const accessToken = Buffer.from(`${email}:${password}`).toString('base64');
 const superAdmin = {
     name: 'Omar',
