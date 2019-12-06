@@ -10,8 +10,8 @@ const {seedSuperAdmin} = require('./seed');
 
 const PORT = process.env.PORT || 8080;
 
-app.use(morgan('tiny'));
 app.use(cors());
+app.use(morgan('tiny'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
