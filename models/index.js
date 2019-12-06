@@ -6,6 +6,7 @@ mongoose.connect(process.env.DATABASEURL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
+    useFindAndModify: true
 });
 
 module.exports.Admin = require('./admin');
