@@ -7,6 +7,7 @@ const bodyParser = require('body-parser');
 const errorHandler = require('./handlers/error');
 const authRoutes = require('./routes/auth');
 const adminRoutes = require('./routes/admin');
+const userRoutes = require('./routes/user');
 const {seedSuperAdmin} = require('./seed');
 
 const PORT = process.env.PORT || 8080;
@@ -19,6 +20,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 // routes go here
 app.use('/api/auth', authRoutes);
 app.use('/api/admins', adminRoutes);
+app.use('/api/users', userRoutes);
 
 // error handling
 app.use((req, res, next) => {

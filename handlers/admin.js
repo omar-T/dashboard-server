@@ -44,7 +44,7 @@ exports.updateAdmin = async function(req, res, next){
         return res.status(200).json({
             updatedAdmin,
             success: {
-                message: 'Admin updated successfully'
+                message: 'Admin updated successfully.'
             }
         });
     }catch(err){
