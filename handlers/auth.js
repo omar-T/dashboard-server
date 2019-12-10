@@ -8,7 +8,6 @@ exports.signin = async function(req, res, next){
             email: req.body.email
         });
         let {id, email, accessToken, isSuper, isActive, name, surname} = admin;
-        console.log(isSuper);
         let authCreds = `${req.body.email}:${req.body.password}`;
         let incomingToken = Buffer.from(authCreds).toString('base64');
         let isMatch = accessToken === incomingToken;
