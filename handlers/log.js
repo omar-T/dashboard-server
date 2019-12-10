@@ -10,3 +10,12 @@ exports.getLogs = async function(req, res, next){
         return next(err);
     }
 }
+
+exports.createLog = async function(req, res, next){
+    try{
+        let log = await db.Log.create(req.body);
+        return res.status(200).json(log);
+    }catch(err){
+        return next(err);
+    }
+}
