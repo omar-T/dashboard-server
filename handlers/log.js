@@ -1,6 +1,6 @@
 const db = require('../models');
 
-// /api/logs
+// GET - /api/logs
 exports.getLogs = async function(req, res, next){
     try{
         let logs = await db.Log.find()
@@ -11,6 +11,7 @@ exports.getLogs = async function(req, res, next){
     }
 }
 
+// POST - /api/logs
 exports.createLog = async function(req, res, next){
     try{
         let log = await db.Log.create(req.body);
