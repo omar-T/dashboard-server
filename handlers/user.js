@@ -15,7 +15,9 @@ exports.getUsers = async function(req, res, next){
 exports.createUser = async function(req, res, next){
     try{
         let user = await db.User.create(req.body);
-        return res.status(200).json(user);
+        return res.status(200).json({
+            message: 'User added successfully.'
+        });
     }catch(err){
         if(err.code === 11000){
             err.message = 'Sorry, that email is already taken!'
@@ -53,6 +55,6 @@ exports.updateUser = async function(req, res, next){
             }
         });
     }catch(err){
-        next(err);
+        return next(err);
     }
 }

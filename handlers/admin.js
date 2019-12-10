@@ -39,7 +39,6 @@ exports.deleteAdmin = async function(req, res, next){
 // UPDATE - /api/admins/:admin_id
 exports.updateAdmin = async function(req, res, next){
     try{
-        console.log(req.body);
         let updatedAdmin = await db.Admin.findOneAndUpdate({_id: req.params.admin_id}, req.body, {new: true});
         return res.status(200).json({
             updatedAdmin,
