@@ -10,3 +10,4 @@ mongoose.connect(process.env.DATABASEURL, {
 });
 
 module.exports.Admin = require('./admin');
+module.exports.User = require('./user');
