@@ -8,6 +8,7 @@ const errorHandler = require('./handlers/error');
 const authRoutes = require('./routes/auth');
 const adminRoutes = require('./routes/admin');
 const userRoutes = require('./routes/user');
+const logRoutes = require('./routes/log');
 const {seedSuperAdmin} = require('./seed');
 
 const PORT = process.env.PORT || 8080;
@@ -21,6 +22,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use('/api/auth', authRoutes);
 app.use('/api/admins', adminRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/logs', logRoutes);
 
 // error handling
 app.use((req, res, next) => {
