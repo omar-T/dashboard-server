@@ -34,7 +34,7 @@ exports.seedLogs = async function(req, res, next){
     let users = await db.User.find();
     users.forEach(u => {
         let id = u._id;
-        for(let i = 0; i < 3; i++){
+        for(let i = 0; i < 2; i++){
             let random = Math.ceil(Math.random() * 4);
             let logData = {
                 userId: id,
