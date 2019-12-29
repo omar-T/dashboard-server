@@ -42,7 +42,7 @@ exports.updateAdmin = async function(req, res, next){
         let adminData = req.body;
         let decode = Buffer.from(req.body.accessToken, 'base64').toString();
         let newAuthCred = '';
-
+        
         // handling accessToken
         if(req.body.email && req.body.password){
             newAuthCred = `${req.body.email}:${req.body.password}`;
