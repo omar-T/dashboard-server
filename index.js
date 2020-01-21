@@ -26,7 +26,7 @@ app.use('/api/logs', logRoutes);
 
 // Seed database with active and super admin if not found
 seedSuperAdmin();
-seedLogs();
+// seedLogs();
 
 // error handling
 app.use((req, res, next) => {
