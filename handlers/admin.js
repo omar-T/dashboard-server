@@ -1,7 +1,7 @@
 const db = require('../models');
 
-// /api/admins
-exports.getAdmins = async function(req, res, next){
+// GET - /api/admins
+exports.getAdmins = async (req, res, next) => {
     try{
         let admins = await db.Admin.find()
                             .sort({createdAt: 'desc'});
@@ -11,8 +11,26 @@ exports.getAdmins = async function(req, res, next){
     }
 }
 
-// /api/admins/:admin_id
-exports.getAdmin = async function(req, res, next){
+// POST - /api/admins
+exports.createAdmin = async (req, res, next) => {
+    try{
+        let admin = await db.Admin.create(req.body);
+        return res.status(200).json({
+            message: 'Admin added successfully.'
+        });
+    }catch(err){
+        if(err.code === 11000){
+            err.message = 'Sorry, that email is already taken!'
+        }
+        return next({
+            status: 400,
+            message: err.message
+        });
+    }
+}
+
+// GET - /api/admins/:admin_id
+exports.getAdmin = async (req, res, next) => {
     try{
         let foundAdmin = await db.Admin.findById(req.params.admin_id);
         return res.status(200).json(foundAdmin);
@@ -22,7 +40,7 @@ exports.getAdmin = async function(req, res, next){
 }
 
 // DELETE - /api/admins/:admin_id
-exports.deleteAdmin = async function(req, res, next){
+exports.deleteAdmin = async (req, res, next) => {
     try{
         let foundAdmin = await db.Admin.findById(req.params.admin_id);
         await foundAdmin.remove();
@@ -36,8 +54,8 @@ exports.deleteAdmin = async function(req, res, next){
     }
 }
 
-// UPDATE - /api/admins/:admin_id
-exports.updateAdmin = async function(req, res, next){
+// PUT - /api/admins/:admin_id
+exports.updateAdmin = async (req, res, next) => {
     try{
         let adminData = req.body;
         let decode = Buffer.from(req.body.accessToken, 'base64').toString();
