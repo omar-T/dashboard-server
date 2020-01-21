@@ -55,6 +55,12 @@ exports.updateUser = async function(req, res, next){
             }
         });
     }catch(err){
-        return next(err);
+        if(err.code === 11000){
+            err.message = 'Sorry, that email is already taken!'
+        }
+        return next({
+            status: 400,
+            message: err.message
+        });
     }
 }
