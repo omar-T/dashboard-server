@@ -1,7 +1,7 @@
 const db = require('../models');
 
 // GET - /api/users
-exports.getUsers = async function(req, res, next){
+exports.getUsers = async (req, res, next) => {
     try{
         let users = await db.User.find()
                             .sort({createdAt: 'desc'});
@@ -12,7 +12,7 @@ exports.getUsers = async function(req, res, next){
 }
 
 // POST - /api/users
-exports.createUser = async function(req, res, next){
+exports.createUser = async (req, res, next) => {
     try{
         let user = await db.User.create(req.body);
         return res.status(200).json({
@@ -30,7 +30,7 @@ exports.createUser = async function(req, res, next){
 }
 
 // DELETE - /api/users/:user_id
-exports.deleteUser = async function(req, res, next){
+exports.deleteUser = async (req, res, next) => {
     try{
         let foundUser = await db.User.findById(req.params.user_id);
         await foundUser.remove();
@@ -45,7 +45,7 @@ exports.deleteUser = async function(req, res, next){
 }
 
 // UPDATE - /api/users/:user_id
-exports.updateUser = async function(req, res, next){
+exports.updateUser = async (req, res, next) => {
     try{
         let updatedUser = await db.User.findOneAndUpdate({_id: req.params.user_id}, req.body, {new: true});
         return res.status(200).json({
