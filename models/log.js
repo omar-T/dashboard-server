@@ -10,6 +10,10 @@ const logShcema = new mongoose.Schema({
     clickedDoc: {
         type: String
     },
+    docType: {
+        type: Number,
+        required: false,
+    },
     createdAt: {
         type: Date,
         required: true,

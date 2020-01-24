@@ -15,7 +15,8 @@ const userSchema = new mongoose.Schema({
         unique: true
     },
     companyName: {
-        type: String
+        type: String,
+        required: true
     },
     companyId: {
         type: mongoose.Schema.Types.ObjectId
@@ -34,6 +35,12 @@ const userSchema = new mongoose.Schema({
     },
     history: {
         type: Array
+    },
+    resetPasswordToken: {
+        type: String
+    },
+    resetPasswordExpires: {
+        type: Number
     }
 },{
     timestamps: true
