@@ -40,7 +40,7 @@ exports.deleteUser = async (req, res, next) => {
             }
         });
     }catch(err){
-        next(err);
+        return next(err);
     }
 }
 
@@ -62,5 +62,17 @@ exports.updateUser = async (req, res, next) => {
             status: 400,
             message: err.message
         });
+    }
+}
+
+// GET - /api/users/count
+exports.getUsersCount = async (req, res, next) => {
+    try{
+        let usersCount = await db.User.countDocuments();
+        return res.status(200).json({
+            usersCount
+        });
+    }catch(err){
+        return next(err);
     }
 }
