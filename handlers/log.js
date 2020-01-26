@@ -93,10 +93,11 @@ exports.getActivityLastFiveDays = async (req, res, next) => {
             { $sort: {_id: 1} },
             { $project: { date: "$date", count: 1, _id: 0} }
         ]);
-
         let fiveDaysLogs = [];
         for(let i = 1; i < labels.length; i++){
-            let index = logs.findIndex(log => Moment(log.date).format('YYYY-MM-DD') === Moment(labels[i]).format('YYYY-MM-DD'));
+            let index = logs.findIndex(log => {
+                return Moment(log.date).format('YYYY-MM-DD') === Moment(labels[i]).format('YYYY-MM-DD')
+            });
             if(index === -1){
                 fiveDaysLogs.push({
                     count: 0,
@@ -118,7 +119,15 @@ exports.getActivityLastFiveDays = async (req, res, next) => {
 
 // GET - /api/logs/activityLastFourWeeks
 exports.getActivityLastFourWeeks = async (req, res, next) => {
-    
+    try{
+        let labels = getDates(4, 'weeks');
+        console.log(labels);
+        return res.status(200).json({
+            labels
+        });
+    }catch(err){
+        return next(err);
+    }
 }
 
 const getDates = (diff, type) => {
@@ -126,7 +135,7 @@ const getDates = (diff, type) => {
     const end = Moment();
     let start = Moment().subtract(diff, type);
     for(let m = start; m.diff(end, type) <= 0; m.add(1, type)){
-        dateLabels.push(new Date(m));
+        dateLabels.push(new Date(new Date(m).setHours(23, 59, 59)));
     }
     return dateLabels;
 }
