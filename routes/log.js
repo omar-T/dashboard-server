@@ -18,4 +18,5 @@ router.route('/activityLastFiveDays')
 
 router.route('/activityLastFourWeeks')
     .get(getActivityLastFourWeeks);
+    
 module.exports = router;
