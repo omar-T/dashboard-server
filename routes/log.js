@@ -4,7 +4,9 @@ const {
     getLogs, 
     getMostActiveUsers, 
     getActivityLastFiveDays,
-    getActivityLastFourWeeks
+    getActivityLastFourWeeks,
+    getUserActivityLastFiveDays,
+    getUserActivityLastFourWeeks
 } = require('../handlers/log');
 
 router.route('/')
@@ -18,5 +20,11 @@ router.route('/activityLastFiveDays')
 
 router.route('/activityLastFourWeeks')
     .get(getActivityLastFourWeeks);
+    
+router.route('/userActivityLastFiveDays')
+    .post(getUserActivityLastFiveDays);
+    
+router.route('/userActivityLastFourWeeks')
+    .post(getUserActivityLastFourWeeks);
     
 module.exports = router;
