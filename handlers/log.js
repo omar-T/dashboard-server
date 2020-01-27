@@ -93,11 +93,10 @@ exports.getActivityLastFiveDays = async (req, res, next) => {
             { $sort: {_id: 1} },
             { $project: { date: "$date", count: 1, _id: 0} }
         ]);
+
         let fiveDaysLogs = [];
         for(let i = 1; i < labels.length; i++){
-            let index = logs.findIndex(log => {
-                return Moment(log.date).format('YYYY-MM-DD') === Moment(labels[i]).format('YYYY-MM-DD')
-            });
+            let index = logs.findIndex(log => Moment(log.date).format('YYYY-MM-DD') === Moment(labels[i]).format('YYYY-MM-DD'));
             if(index === -1){
                 fiveDaysLogs.push({
                     count: 0,
@@ -109,6 +108,7 @@ exports.getActivityLastFiveDays = async (req, res, next) => {
                 });
             }
         }
+
         return res.status(200).json({
             fiveDaysLogs
         });
@@ -141,6 +141,7 @@ exports.getActivityLastFourWeeks = async (req, res, next) => {
             { $sort: {_id: 1} },
             { $project: { date: "$date", count: 1, _id: 0} }
         ]);
+
         let fourWeeksLogs = [];
         for(let i = 0; i < labels.length - 1; i++){
             let count = 0;
@@ -152,6 +153,117 @@ exports.getActivityLastFourWeeks = async (req, res, next) => {
             fourWeeksLogs.push({
                 date: labels[i + 1],
                 count
+            });
+        }
+
+        return res.status(200).json({
+            fourWeeksLogs
+        });
+    }catch(err){
+        return next(err);
+    }
+}
+
+// GET - /api/logs/userActivityLastFiveDays
+exports.getUserActivityLastFiveDays = async (req, res, next) => {
+    try{
+        let labels = getDates(5, 'days');
+        const {user_id} = req.body;
+
+        let logs = await db.Log.aggregate([
+            {
+                $match: {
+                    userId: user_id,
+                    createdAt: {
+                        $gte: labels[0]
+                    }
+                }
+            },
+            {
+                $group: {
+                    _id: {
+                        day: {$dayOfMonth: '$createdAt'}
+                    },
+                    count: {$sum: 1},
+                    date: {$min: '$createdAt'}
+                }
+            },
+            { $sort: {_id: 1} },
+            { $project: { date: '$date', count: 1, _id: 0} }
+        ]);
+
+        let fiveDaysLogs = [];
+        if(logs.length !== 0){
+            for(let i = 1; i < labels.length; i++){
+                let index = logs.findIndex(log => Moment(log.date).format('YYYY-MM-DD') === Moment(labels[i]).format('YYYY-MM-DD'));
+                if(index === -1){
+                    fiveDaysLogs.push({
+                        count: 0,
+                        date: labels[i]
+                    });
+                }else{
+                    fiveDaysLogs.push({
+                        ...logs[index]
+                    });
+                }
+            }
+    
+            return res.status(200).json({
+                fiveDaysLogs
+            });
+        }
+        return res.status(200).json({
+            fiveDaysLogs
+        });
+    }catch(err){
+        return next(err);
+    }
+}
+
+// GET - /api/logs/userActivityLastFourWeeks
+exports.getUserActivityLastFourWeeks = async (req, res, next) => {
+    try{
+        let labels = getDates(5, 'weeks');
+        const {user_id} = req.body;
+
+        let logs = await db.Log.aggregate([
+            {
+                $match: {
+                    userId: user_id,
+                    createdAt: {
+                        $gte: labels[0]
+                    }
+                }
+            },
+            {
+                $group: {
+                    _id: {
+                        day: {$dayOfMonth: '$createdAt'}
+                    },
+                    count: {$sum: 1},
+                    date: {$min: '$createdAt'}
+                }
+            },
+            { $sort: {_id: 1} },
+            { $project: { date: '$date', count: 1, _id: 0} }
+        ]);
+
+        let fourWeeksLogs = [];
+        if(logs.length !== 0){
+            for(let i = 0; i < labels.length - 1; i++){
+                let count = 0;
+                logs.forEach(log => {
+                    if(Moment(log.date).isBetween(Moment(labels[i]), Moment(labels[i + 1]))){
+                        count += log.count;
+                    }
+                });
+                fourWeeksLogs.push({
+                    date: labels[i + 1],
+                    count
+                });
+            }
+            return res.status(200).json({
+                fourWeeksLogs
             });
         }
         return res.status(200).json({
