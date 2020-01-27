@@ -3,9 +3,19 @@ const db = require('../models');
 // GET - /api/users
 exports.getUsers = async (req, res, next) => {
     try{
+        const perPage = 8;
+        const pageQuery = parseInt(req.query.page);
+        const pageNumber = pageQuery ? pageQuery : 1;
         let users = await db.User.find()
-                            .sort({createdAt: 'desc'});
-        return res.status(200).json(users);
+            .sort({createdAt: 'desc'})
+            .skip((perPage * pageNumber) - perPage)
+            .limit(perPage);
+        let count = await db.User.countDocuments();
+        return res.status(200).json({
+            allUsers: users,
+            currentPage: pageNumber,
+            pages: Math.ceil(count/perPage)
+        });
     }catch(err){
         return next(err);
     }
