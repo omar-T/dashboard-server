@@ -120,16 +120,49 @@ exports.getActivityLastFiveDays = async (req, res, next) => {
 // GET - /api/logs/activityLastFourWeeks
 exports.getActivityLastFourWeeks = async (req, res, next) => {
     try{
-        let labels = getDates(4, 'weeks');
-        console.log(labels);
+        let labels = getDates(5, 'weeks');
+        let logs = await db.Log.aggregate([
+            {
+                $match: {
+                    createdAt: {
+                        $gte: labels[0]
+                    }
+                }
+            },
+            {
+                $group: {
+                    _id: {
+                        day: {$dayOfMonth: '$createdAt'}
+                    },
+                    count: {$sum: 1},
+                    date: {$min: '$createdAt'}
+                }
+            },
+            { $sort: {_id: 1} },
+            { $project: { date: "$date", count: 1, _id: 0} }
+        ]);
+        let fourWeeksLogs = [];
+        for(let i = 0; i < labels.length - 1; i++){
+            let count = 0;
+            logs.forEach(log => {
+                if(Moment(log.date).isBetween(Moment(labels[i]), Moment(labels[i + 1]))){
+                    count += log.count;
+                }
+            });
+            fourWeeksLogs.push({
+                date: labels[i + 1],
+                count
+            });
+        }
         return res.status(200).json({
-            labels
+            fourWeeksLogs
         });
     }catch(err){
         return next(err);
     }
 }
 
+// function for getting dates
 const getDates = (diff, type) => {
     let dateLabels = [];
     const end = Moment();
