@@ -9,7 +9,7 @@ const authRoutes = require('./routes/auth');
 const adminRoutes = require('./routes/admin');
 const userRoutes = require('./routes/user');
 const logRoutes = require('./routes/log');
-const {seedSuperAdmin, seedLogs} = require('./seed');
+const {seedSuperAdmin} = require('./seed');
 
 const PORT = process.env.PORT || 8080;
 
@@ -26,7 +26,6 @@ app.use('/api/logs', logRoutes);
 
 // Seed database with active and super admin if not found
 seedSuperAdmin();
-// seedLogs();
 
 // error handling
 app.use((req, res, next) => {
